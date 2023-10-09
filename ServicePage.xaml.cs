@@ -23,6 +23,8 @@ namespace ThirdLaboratoryWork
         public ServicePage()
         {
             InitializeComponent();
+            var currentServices = GilmansginAutoServiceEntities.GetContext().Service.ToList();
+            ServiceListView.ItemsSource = currentServices;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
