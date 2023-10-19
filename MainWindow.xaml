@@ -19,7 +19,7 @@
         <Image Source="Resources/service_logo.png" HorizontalAlignment="Left" Grid.ColumnSpan="2"></Image>
         <TextBlock Text="Услуги автосервиса" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Width="272" Margin="0,18,0,0"/>
         <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"></Frame>
-        <Button Content="Назад" Name="BtnBack" HorizontalAlignment="Left"
+        <Button Content="Назад" Name="BtnBack" HorizontalAlignment="Right"
                 Click="BtnBack_Click" Grid.Column="1" Margin="553,22,0,23"></Button>
     </Grid>
 </Window>
