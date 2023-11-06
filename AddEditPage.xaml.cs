@@ -26,56 +26,62 @@ namespace ThirdLaboratoryWork
             InitializeComponent();
             if (SelectedService != null)
             {
+                IsServiceExist = true;
                 _currentService = SelectedService;
             }
             DataContext = _currentService;
         }
 
+        public bool IsServiceExist = false;
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder errors = new StringBuilder();
-
-            if (string.IsNullOrWhiteSpace(_currentService.Title))
-            {
-                errors.AppendLine("Укажите название услуги");
-            }
-            if (_currentService.Cost == 0)
-            {
-                errors.AppendLine("Укажите стоимость услуги");
-            }
-            if (string.IsNullOrWhiteSpace(_currentService.Discount.ToString())) _currentService.Discount = 0;
+            
+            var errors = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(_currentService.Title)) errors.AppendLine("Укажите название услуги");
+            if (_currentService.Cost == 0) errors.AppendLine("Укажите стоимость услуги");
 
             if (_currentService.Discount < 0)
-            {
                 errors.AppendLine("Укажите скидку");
-            }
             if (_currentService.Discount > 100)
-            {
                 errors.AppendLine("Невозможно указать такую скидку");
-            }
-            if (string.IsNullOrWhiteSpace(_currentService.DurationInSeconds))
-            {
-                errors.AppendLine("Укажите длительность услуги");
-            }
+
+            if (string.IsNullOrWhiteSpace(_currentService.Discount.ToString()))
+                _currentService.Discount = 0;
+            if (_currentService.DurationInSeconds < 0 || _currentService.DurationInSeconds > 240)
+                errors.AppendLine("Невозможно указать такую длительность");
+            if (string.IsNullOrWhiteSpace(_currentService.DurationInSeconds.ToString()))
+                _currentService.DurationInSeconds = 0;
+
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
             }
-            if (_currentService.ID == 0)
-            {
-                GilmansginAutoServiceEntities.GetContext().Service.Add(_currentService);
-            }
 
-            try
+            var allServices = GilmansginAutoServiceEntities.GetContext().Service.ToList();
+            allServices = allServices.Where(p => p.Title == _currentService.Title).ToList();
+            if (allServices.Count == 0 || IsServiceExist == true)
+            {
+                if (_currentService.ID == 0)
+                {
+                    GilmansginAutoServiceEntities.GetContext().Service.Add(_currentService);
+                }
+
+                try
+                {
+                    GilmansginAutoServiceEntities.GetContext().SaveChanges();
+                    MessageBox.Show("Информация сохранена");
+                    Manager.MainFrame.GoBack();
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
+            }
+            else
             {
                 GilmansginAutoServiceEntities.GetContext().SaveChanges();
-                MessageBox.Show("информация сохранена");
-                Manager.MainFrame.GoBack();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
+                MessageBox.Show("Уже существует такая услуга");
             }
         }
     }

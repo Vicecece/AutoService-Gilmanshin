@@ -16,12 +16,10 @@ namespace ThirdLaboratoryWork
     public partial class GilmansginAutoServiceEntities : DbContext
     {
         private static GilmansginAutoServiceEntities _context;
-
         public static GilmansginAutoServiceEntities GetContext()
         {
-            if(_context == null )
+            if( _context == null )
                 _context = new GilmansginAutoServiceEntities();
-
             return _context;
         }
         public GilmansginAutoServiceEntities()
